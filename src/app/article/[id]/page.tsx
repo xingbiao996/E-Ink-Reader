@@ -26,7 +26,6 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
     const newPages: string[][] = [];
     let currentLineItems: string[] = [];
     
-    // Hidden div to calculate paragraph height
     const tempContainer = document.createElement('div');
     tempContainer.style.visibility = 'hidden';
     tempContainer.style.position = 'absolute';
@@ -63,7 +62,6 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
     
     setPages(newPages)
     
-    // Restore correct page based on progress
     const targetParagraphIndex = article.currentParagraph || 0
     const targetPage = newPages.findIndex(pageContent => 
         pageContent.includes(article.content[targetParagraphIndex])
@@ -99,13 +97,10 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
         const newProgress = Math.round(((currentPage + 1) / pages.length) * 100);
         setProgress(newProgress);
         
-        // Mock saving progress
         if (article && pages[currentPage]) {
             const firstParagraphOfPage = pages[currentPage][0];
             const paragraphIndex = article.content.indexOf(firstParagraphOfPage);
             console.log(`模拟保存阅读进度：第 ${paragraphIndex} 段`);
-            // In a real app, you would save this index to the database.
-            // article.currentParagraph = paragraphIndex;
         }
     }
   }, [currentPage, pages, article]);
@@ -136,7 +131,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
 
   return (
     <div className="container mx-auto max-w-3xl p-4 h-screen flex flex-col">
-        <header className="py-4 border-b mb-4">
+        <header className="py-4 border-b mb-4 flex-shrink-0">
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2 overflow-hidden">
                     <BookOpen className="w-5 h-5 text-muted-foreground shrink-0" />
@@ -144,10 +139,12 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
                         {article.title}
                     </h1>
                 </div>
-                 <Button onClick={() => router.push('/')} variant="ghost" size="sm">
-                    <Home className="mr-2 h-4 w-4" />
-                    返回书架
-                </Button>
+                 <div className="flex items-center">
+                   <Progress value={progress} className="h-1.5 w-32" />
+                   <span className="text-xs font-medium text-muted-foreground ml-3 whitespace-nowrap">
+                     {pages.length > 0 ? `第 ${currentPage + 1} / ${pages.length} 页` : `0%`}
+                   </span>
+                </div>
             </div>
         </header>
 
@@ -163,19 +160,17 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
             )}
         </main>
         
-        <footer className="py-4 border-t mt-4">
+        <footer className="py-4 border-t mt-4 flex-shrink-0">
             <div className="flex items-center justify-between">
                 <Button onClick={handlePrevPage} variant="outline" disabled={isFirstPage} className={isFirstPage ? "pointer-events-none opacity-50" : ""}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     上一页
                 </Button>
                 
-                <div className="flex flex-col items-center w-40">
-                   <Progress value={progress} className="h-1.5" />
-                   <span className="text-xs font-medium text-muted-foreground mt-2">
-                     {pages.length > 0 ? `第 ${currentPage + 1} 页 / 共 ${pages.length} 页` : `0%`}
-                   </span>
-                </div>
+                <Button onClick={() => router.push('/')} variant="ghost">
+                    <Home className="mr-2 h-4 w-4" />
+                    返回书架
+                </Button>
 
                 <Button onClick={handleNextPage} variant="outline" disabled={isLastPage} className={isLastPage ? "pointer-events-none opacity-50" : ""}>
                     下一页
