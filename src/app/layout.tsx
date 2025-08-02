@@ -3,6 +3,9 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components/Header'
+import { Home } from 'lucide-react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
   title: '电子墨水阅读器',
@@ -34,6 +37,16 @@ export default function RootLayout({
           <main className="flex-1">
             {children}
           </main>
+          <footer className="sticky bottom-0 w-full bg-background/95 p-2 border-t backdrop-blur">
+             <div className="container mx-auto max-w-6xl flex justify-center">
+                 <Button asChild variant="ghost">
+                    <Link href="/">
+                        <Home className="w-5 h-5 mr-2" />
+                        返回书架
+                    </Link>
+                </Button>
+            </div>
+          </footer>
         </div>
         <Toaster />
       </body>

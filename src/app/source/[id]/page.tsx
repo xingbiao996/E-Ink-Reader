@@ -17,8 +17,8 @@ export default async function SourceArticlesPage({ params }: { params: { id: str
     <div className="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8">
       <div className="space-y-8">
         <div>
-            <Button asChild variant="ghost" className="mb-4">
-                <Link href="/">
+            <Button asChild variant="ghost" className="-ml-4 mb-4">
+                <Link href="/sources">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     所有来源
                 </Link>

@@ -10,4 +10,8 @@ export interface Article {
   sourceId: string;
   title: string;
   content: string[]; // Array of paragraphs for pagination
+  sourceName: string;
+  onShelf: boolean;
+  readPercentage: number;
+  currentChapter: string;
 }

@@ -33,9 +33,9 @@ export default async function ArticlePage({
     <div className="container mx-auto max-w-2xl p-4 sm:p-6 lg:p-8">
         <div className="mb-6">
             <Button asChild variant="ghost" className="-ml-4">
-                <Link href={`/source/${article.sourceId}`}>
+                <Link href={`/library`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    返回文章列表
+                    返回图书馆
                 </Link>
             </Button>
         </div>

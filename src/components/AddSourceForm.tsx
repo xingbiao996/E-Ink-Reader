@@ -39,7 +39,7 @@ export function AddSourceForm() {
         </Button>
       </div>
       <p className="text-sm text-muted-foreground">
-        输入您想阅读的网站或RSS源的URL。在此演示中，来源实际上不会被添加。
+        输入网站或RSS源的URL。这是一个演示，来源不会被真的添加。
       </p>
     </form>
   )

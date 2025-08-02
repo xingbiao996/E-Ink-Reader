@@ -24,27 +24,43 @@ const mockSources: Source[] = [
 const mockArticles: Article[] = [
   { 
     id: '101', 
-    sourceId: '1', 
+    sourceId: '1',
+    sourceName: '科技博客',
     title: 'Web开发的未来', 
-    content: LOREM_IPSUM_PARAGRAPHS.slice(0, 12)
+    content: LOREM_IPSUM_PARAGRAPHS.slice(0, 12),
+    onShelf: true,
+    readPercentage: 65,
+    currentChapter: '第五章：服务端组件'
   },
   { 
     id: '102', 
     sourceId: '1', 
+    sourceName: '科技博客',
     title: '理解量子计算', 
-    content: LOREM_IPSUM_PARAGRAPHS.slice(4, 10)
+    content: LOREM_IPSUM_PARAGRAPHS.slice(4, 10),
+    onShelf: true,
+    readPercentage: 15,
+    currentChapter: '第一章：基本概念'
   },
   { 
     id: '201', 
     sourceId: '2', 
+    sourceName: '文学期刊',
     title: '古典文学的现代解读', 
-    content: LOREM_IPSUM_PARAGRAPHS.slice(2, 9)
+    content: LOREM_IPSUM_PARAGRAPHS.slice(2, 9),
+    onShelf: false,
+    readPercentage: 0,
+    currentChapter: '序言'
   },
    { 
     id: '301', 
     sourceId: '3', 
+    sourceName: '科学周刊',
     title: '基因工程的突破', 
-    content: LOREM_IPSUM_PARAGRAPHS.slice(0, 5)
+    content: LOREM_IPSUM_PARAGRAPHS.slice(0, 5),
+    onShelf: true,
+    readPercentage: 90,
+    currentChapter: '第三章：伦理考量'
   },
 ];
 
@@ -61,5 +77,13 @@ export async function getArticlesBySourceId(sourceId: string): Promise<Article[]
 }
 
 export async function getArticleById(id: string): Promise<Article | undefined> {
-    return new Promise((resolve) => setTimeout(() => resolve(mockArticles.find(a => a.id === id)), 50));
+  return new Promise((resolve) => setTimeout(() => resolve(mockArticles.find(a => a.id === id)), 50));
+}
+
+export async function getAllArticles(): Promise<Article[]> {
+  return new Promise((resolve) => setTimeout(() => resolve(mockArticles), 50));
+}
+
+export async function getShelfBooks(): Promise<Article[]> {
+  return new Promise((resolve) => setTimeout(() => resolve(mockArticles.filter(a => a.onShelf)), 50));
 }
