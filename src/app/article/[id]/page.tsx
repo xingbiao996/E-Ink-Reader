@@ -37,6 +37,15 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
     
     let currentHeight = 0;
 
+    // Add title to temp container for height calculation on first page
+    const titleElement = document.createElement('h1');
+    titleElement.textContent = article.title;
+    titleElement.className = "text-3xl font-bold font-headline mb-8";
+    tempContainer.appendChild(titleElement);
+    currentHeight += titleElement.offsetHeight;
+    tempContainer.removeChild(titleElement);
+
+
     article.content.forEach(p => {
         const pElement = document.createElement('p');
         pElement.textContent = p;
@@ -135,6 +144,9 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
         <main ref={pageRef} className="flex-grow overflow-hidden py-4">
              {pages.length > 0 ? (
                 <div ref={contentRef} className="prose prose-lg dark:prose-invert max-w-none space-y-4 text-justify h-full" style={{ fontSize: '1.1rem', lineHeight: '1.7' }}>
+                    {isFirstPage && (
+                      <h1 className="text-3xl font-bold font-headline mb-8">{article.title}</h1>
+                    )}
                     {pages[currentPage]?.map((paragraph, index) => (
                         <p key={index}>{paragraph}</p>
                     ))}
