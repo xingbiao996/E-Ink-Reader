@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight, Home, BookOpen } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 
-export default function ArticlePage({ params }: { params: { id: string } }) {
+export default function ArticlePage({ params: routeParams }: { params: { id: string } }) {
+  const [params] = useState(routeParams);
   const [article, setArticle] = useState<Article | null>(null)
   const [pages, setPages] = useState<string[][]>([])
   const [currentPage, setCurrentPage] = useState(0)
