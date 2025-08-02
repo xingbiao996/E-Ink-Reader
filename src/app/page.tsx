@@ -183,7 +183,7 @@ export default function BookshelfPage() {
                      图书馆
                    </Button>
                    <Button onClick={() => router.push('/sources')} variant="ghost">
-                    管理来源
+                    设置
                   </Button>
               </div>
 
