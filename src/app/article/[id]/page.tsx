@@ -31,16 +31,7 @@ export default async function ArticlePage({
 
   return (
     <div className="container mx-auto max-w-2xl p-4 sm:p-6 lg:p-8">
-        <div className="mb-6">
-            <Button asChild variant="ghost" className="-ml-4">
-                <Link href={`/library`}>
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    返回图书馆
-                </Link>
-            </Button>
-        </div>
-
-        <article className="space-y-6">
+        <article className="space-y-6 mt-8">
             <header>
                 <h1 className="text-4xl font-bold font-headline leading-tight tracking-tight">{article.title}</h1>
             </header>
