@@ -10,8 +10,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Literata', 'serif'],
-        headline: ['Literata', 'serif'],
+        body: ['"Noto Serif SC"', 'serif'],
+        headline: ['"Noto Serif SC"', 'serif'],
         code: ['monospace'],
       },
       colors: {
