@@ -13,19 +13,19 @@ export default async function SourceManagementPage() {
     <div className="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8">
       <div className="space-y-8">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold font-headline tracking-tight">Reading Sources</h1>
+          <h1 className="text-3xl font-bold font-headline tracking-tight">阅读源</h1>
           <p className="text-muted-foreground">
-            Manage your imported web page reading sources.
+            管理您导入的网页阅读源。
           </p>
         </div>
 
         <AddSourceForm />
 
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold font-headline">Your Sources</h2>
+          <h2 className="text-xl font-semibold font-headline">您的来源</h2>
           {sources.length === 0 ? (
             <Card className="flex items-center justify-center h-40">
-              <p className="text-muted-foreground">You haven't added any sources yet.</p>
+              <p className="text-muted-foreground">您还没有添加任何来源。</p>
             </Card>
           ) : (
             <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
@@ -37,7 +37,7 @@ export default async function SourceManagementPage() {
                       <CardDescription className="line-clamp-1">{source.url}</CardDescription>
                     </div>
                      <form action={deleteSourceAction.bind(null, source.id)}>
-                        <Button variant="ghost" size="icon" className="shrink-0" aria-label="Delete source">
+                        <Button variant="ghost" size="icon" className="shrink-0" aria-label="删除来源">
                             <Trash2 className="h-4 w-4 text-muted-foreground" />
                         </Button>
                     </form>
@@ -46,11 +46,11 @@ export default async function SourceManagementPage() {
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <div className="flex items-center">
                             <Book className="mr-1.5 h-4 w-4" />
-                            <span>{source.articleCount} articles</span>
+                            <span>{source.articleCount} 篇文章</span>
                         </div>
                         <Button asChild variant="ghost" size="sm">
                             <Link href={`/source/${source.id}`}>
-                                View Articles <ArrowRight className="ml-2 h-4 w-4" />
+                                查看文章 <ArrowRight className="ml-2 h-4 w-4" />
                             </Link>
                         </Button>
                     </div>

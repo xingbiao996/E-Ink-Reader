@@ -16,34 +16,34 @@ const LOREM_IPSUM_PARAGRAPHS = [
 ];
 
 const mockSources: Source[] = [
-  { id: '1', name: 'TechReads', url: 'https://techreads.example.com', articleCount: 2 },
-  { id: '2', name: 'Literary Journal', url: 'https://literaryjournal.example.com', articleCount: 1 },
-  { id: '3', name: 'Science Weekly', url: 'https://scienceweekly.example.com', articleCount: 1 },
+  { id: '1', name: '科技博客', url: 'https://techreads.example.com', articleCount: 2 },
+  { id: '2', name: '文学期刊', url: 'https://literaryjournal.example.com', articleCount: 1 },
+  { id: '3', name: '科学周刊', url: 'https://scienceweekly.example.com', articleCount: 1 },
 ];
 
 const mockArticles: Article[] = [
   { 
     id: '101', 
     sourceId: '1', 
-    title: 'The Future of Web Development', 
+    title: 'Web开发的未来', 
     content: LOREM_IPSUM_PARAGRAPHS.slice(0, 12)
   },
   { 
     id: '102', 
     sourceId: '1', 
-    title: 'Understanding Quantum Computing', 
+    title: '理解量子计算', 
     content: LOREM_IPSUM_PARAGRAPHS.slice(4, 10)
   },
   { 
     id: '201', 
     sourceId: '2', 
-    title: 'A Modern Take on Classic Literature', 
+    title: '古典文学的现代解读', 
     content: LOREM_IPSUM_PARAGRAPHS.slice(2, 9)
   },
    { 
     id: '301', 
     sourceId: '3', 
-    title: 'Breakthroughs in Genetic Engineering', 
+    title: '基因工程的突破', 
     content: LOREM_IPSUM_PARAGRAPHS.slice(0, 5)
   },
 ];

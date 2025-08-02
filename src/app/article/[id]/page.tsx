@@ -35,7 +35,7 @@ export default async function ArticlePage({
             <Button asChild variant="ghost" className="-ml-4">
                 <Link href={`/source/${article.sourceId}`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Articles
+                    返回文章列表
                 </Link>
             </Button>
         </div>
@@ -60,12 +60,12 @@ export default async function ArticlePage({
                           tabIndex={isFirstPage ? -1 : undefined}
                           className={cn(isFirstPage && "pointer-events-none opacity-50")}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Previous
+                        上一页
                     </Link>
                 </Button>
                 
                 <span className="text-sm font-medium text-muted-foreground">
-                    Page {currentPage} of {totalPages}
+                    第 {currentPage} 页 / 共 {totalPages} 页
                 </span>
 
                 <Button asChild variant="outline" disabled={isLastPage}>
@@ -73,7 +73,7 @@ export default async function ArticlePage({
                           aria-disabled={isLastPage}
                           tabIndex={isLastPage ? -1 : undefined}
                           className={cn(isLastPage && "pointer-events-none opacity-50")}>
-                        Next
+                        下一页
                         <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                 </Button>

@@ -20,11 +20,11 @@ export default async function SourceArticlesPage({ params }: { params: { id: str
             <Button asChild variant="ghost" className="mb-4">
                 <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    All Sources
+                    所有来源
                 </Link>
             </Button>
             <h1 className="text-3xl font-bold font-headline tracking-tight">{source.name}</h1>
-            <p className="text-muted-foreground">Articles available from this source.</p>
+            <p className="text-muted-foreground">此来源提供的文章。</p>
         </div>
 
         {articles.length > 0 ? (
@@ -41,7 +41,7 @@ export default async function SourceArticlesPage({ params }: { params: { id: str
                 <CardContent>
                     <div className="flex items-center text-sm text-muted-foreground">
                         <BookOpen className="mr-1.5 h-4 w-4" />
-                        <span>{article.content.length} paragraphs</span>
+                        <span>{article.content.length} 个段落</span>
                     </div>
                 </CardContent>
               </Card>
@@ -49,7 +49,7 @@ export default async function SourceArticlesPage({ params }: { params: { id: str
           </div>
         ) : (
           <Card className="flex items-center justify-center h-40">
-            <p className="text-muted-foreground">No articles found for this source.</p>
+            <p className="text-muted-foreground">未找到此来源的文章。</p>
           </Card>
         )}
       </div>

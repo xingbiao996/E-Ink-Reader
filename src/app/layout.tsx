@@ -5,8 +5,8 @@ import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components/Header'
 
 export const metadata: Metadata = {
-  title: 'E-Ink Reader',
-  description: 'A web reading platform optimized for Kindle e-ink browsers.',
+  title: '电子墨水阅读器',
+  description: '一个为Kindle电子墨水浏览器优化的网页阅读平台。',
 }
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="zh-CN" className="h-full">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
