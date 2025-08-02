@@ -43,15 +43,19 @@ export default function LibraryPage() {
 
     if (articles.length > 0) {
       const cardClone = document.createElement('div');
-      cardClone.className = 'flex items-center justify-between p-4'; // Corresponds to Card's classes
+      cardClone.className = 'flex items-center justify-between p-4 border rounded-lg'; // Corresponds to Card's classes
       cardClone.innerHTML = `<div><div><h3>Title</h3></div><div><p>Source</p></div></div><button>Details</button>`;
       tempContainer.appendChild(cardClone);
-      tempCardHeight = cardClone.offsetHeight + 16; // Include grid gap
+      const cardStyle = window.getComputedStyle(cardClone);
+      const cardMargin = parseFloat(cardStyle.marginTop) + parseFloat(cardStyle.marginBottom);
+      const gridGap = 16; // from `gap-4`
+      tempCardHeight = cardClone.offsetHeight + gridGap;
       tempContainer.removeChild(cardClone);
     }
     
+    document.body.removeChild(tempContainer);
+
     if (tempCardHeight === 0) {
-        document.body.removeChild(tempContainer);
         return;
     }
     
@@ -61,7 +65,6 @@ export default function LibraryPage() {
         newPages.push(articles.slice(i, i + itemsPerPage));
     }
 
-    document.body.removeChild(tempContainer);
     setPages(newPages);
   }, [articles]);
 
@@ -80,7 +83,10 @@ export default function LibraryPage() {
   
   useEffect(() => {
     if (!isLoading && articles.length > 0) {
-      calculatePages();
+      // Use requestAnimationFrame to ensure the DOM is painted before calculating.
+      requestAnimationFrame(() => {
+        calculatePages();
+      });
     }
     window.addEventListener('resize', calculatePages);
     return () => window.removeEventListener('resize', calculatePages);
@@ -100,7 +106,7 @@ export default function LibraryPage() {
   }
   
   const isFirstPage = currentPage === 0;
-  const isLastPage = currentPage === pages.length - 1;
+  const isLastPage = pages.length - 1 <= currentPage;
 
 
   if (isLoading) {
@@ -122,8 +128,8 @@ export default function LibraryPage() {
       </header>
 
       <main ref={pageRef} className="flex-grow overflow-hidden">
-        {pages.length > 0 ? (
-          <div className="grid gap-4 h-full">
+        {pages.length > 0 && pages[currentPage] ? (
+          <div className="grid gap-4 h-full content-start">
             {pages[currentPage].map((article) => (
               <Dialog key={article.id}>
                 <Card className="flex items-center justify-between p-4">
@@ -166,10 +172,14 @@ export default function LibraryPage() {
             ))}
           </div>
         ) : (
-          <div className="flex items-center justify-center h-full">
-            <Card className="flex items-center justify-center h-40 w-full">
-                <p className="text-muted-foreground">图书馆中没有书籍。请先添加来源。</p>
-            </Card>
+           <div className="flex items-center justify-center h-full">
+            {isLoading ? (
+               <p className="text-muted-foreground">正在计算分页...</p>
+            ) : (
+              <Card className="flex items-center justify-center h-40 w-full">
+                  <p className="text-muted-foreground">图书馆中没有书籍。请先添加来源。</p>
+              </Card>
+            )}
           </div>
         )}
       </main>

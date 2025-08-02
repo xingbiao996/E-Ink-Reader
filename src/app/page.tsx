@@ -18,45 +18,61 @@ export default function BookshelfPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   
   const calculatePages = useCallback(() => {
-    if (!shelfBooks.length || !pageRef.current) return
+    if (!shelfBooks.length || !pageRef.current) {
+        setPages([]);
+        return;
+    };
 
-    const pageHeight = pageRef.current.clientHeight
+    const pageHeight = pageRef.current.clientHeight;
+    const pageWidth = pageRef.current.clientWidth;
+    
+    // Determine columns based on page width
+    let numColumns = 1;
+    if (pageWidth >= 1024) numColumns = 4; // lg
+    else if (pageWidth >= 768) numColumns = 3; // md
+    else if (pageWidth >= 640) numColumns = 2; // sm
+
     const newPages: Article[][] = []
-    let currentPageItems: Article[] = []
+    
+    const tempContainer = document.createElement('div');
+    tempContainer.style.visibility = 'hidden';
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.width = `${pageWidth}px`;
+    tempContainer.className = `grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4`;
+    document.body.appendChild(tempContainer);
 
-    const tempContainer = document.createElement('div')
-    tempContainer.style.visibility = 'hidden'
-    tempContainer.style.position = 'absolute'
-    tempContainer.style.width = `${pageRef.current.clientWidth}px`
-    tempContainer.className = 'grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-    document.body.appendChild(tempContainer)
-
-    let currentHeight = 0
-    let tempCardHeight = 0
+    let tempCardHeight = 0;
 
     // Measure a single card's height
     if (shelfBooks.length > 0) {
       const cardClone = document.createElement('div')
-      cardClone.className = "flex flex-col group" // Corresponds to Card's classes
+      cardClone.className = "flex flex-col group border rounded-lg"; // Corresponds to Card's classes
       // Simple inner structure for height calculation
-      cardClone.innerHTML = `<div class="p-4 flex-1"><h3 class="font-headline text-lg mb-2 group-hover:underline">Title</h3><p class="text-xs flex items-center gap-1.5">Source</p></div><div class="p-4 pt-0"><div class="h-2 mb-2"></div><div class="text-xs">Progress</div></div>`
-      tempContainer.appendChild(cardClone)
-      tempCardHeight = cardClone.offsetHeight + 24 // Include grid gap
-      tempContainer.removeChild(cardClone)
+      cardClone.innerHTML = `<div class="p-4 flex-1"><h3 class="font-headline text-lg mb-2 group-hover:underline">Title</h3><p class="text-xs flex items-center gap-1.5">Source</p></div><div class="p-4 pt-0"><div class="h-2 mb-2 w-full"></div><div class="text-xs">Progress</div></div>`
+      tempContainer.appendChild(cardClone);
+      const gridGap = 24; // from gap-6
+      tempCardHeight = cardClone.offsetHeight + gridGap;
+      tempContainer.removeChild(cardClone);
     }
+    
+    document.body.removeChild(tempContainer);
 
     if(tempCardHeight === 0) {
-      document.body.removeChild(tempContainer);
       return;
     }
-
-    const itemsPerPage = Math.floor(pageHeight / tempCardHeight) * 4 // 4 columns
     
+    const rowsPerPage = Math.floor(pageHeight / tempCardHeight);
+    const itemsPerPage = rowsPerPage * numColumns;
+    
+    if (itemsPerPage <= 0) {
+        setPages([]);
+        return;
+    }
+
     for (let i = 0; i < shelfBooks.length; i += itemsPerPage) {
         newPages.push(shelfBooks.slice(i, i + itemsPerPage));
     }
 
-    document.body.removeChild(tempContainer)
     setPages(newPages)
   }, [shelfBooks])
 
@@ -72,9 +88,10 @@ export default function BookshelfPage() {
   }, [])
   
   useEffect(() => {
-    if (!isLoading && shelfBooks.length) {
+    // Use requestAnimationFrame to ensure the DOM is painted before calculating.
+    requestAnimationFrame(() => {
         calculatePages();
-    }
+    });
     window.addEventListener('resize', calculatePages)
     return () => window.removeEventListener('resize', calculatePages)
   }, [isLoading, shelfBooks, calculatePages])
@@ -93,7 +110,7 @@ export default function BookshelfPage() {
   }
 
   const isFirstPage = currentPage === 0
-  const isLastPage = currentPage === pages.length - 1
+  const isLastPage = pages.length - 1 <= currentPage
 
   if (isLoading) {
     return <div className="container mx-auto max-w-6xl p-4 flex justify-center items-center h-screen">加载中...</div>
@@ -113,8 +130,8 @@ export default function BookshelfPage() {
       </header>
 
       <main ref={pageRef} className="flex-grow overflow-hidden">
-        {pages.length > 0 ? (
-           <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 h-full">
+        {pages.length > 0 && pages[currentPage] ? (
+           <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 h-full content-start">
               {pages[currentPage].map((book) => (
                 <Card key={book.id} className="flex flex-col group">
                     <CardHeader className="p-4 flex-1">
@@ -137,9 +154,13 @@ export default function BookshelfPage() {
             </div>
         ) : (
           <div className="flex items-center justify-center h-full">
-            <Card className="flex items-center justify-center h-40 w-full">
-              <p className="text-muted-foreground">您的书架是空的。请先从图书馆添加书籍。</p>
-            </Card>
+             {isLoading ? (
+               <p className="text-muted-foreground">正在计算分页...</p>
+             ) : (
+                <Card className="flex items-center justify-center h-40 w-full">
+                  <p className="text-muted-foreground">您的书架是空的。请先从图书馆添加书籍。</p>
+                </Card>
+             )}
           </div>
         )}
       </main>
