@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -6,7 +7,7 @@ import { getAllArticles } from '@/lib/data'
 import { notFound, useRouter } from 'next/navigation'
 import type { Article } from '@/lib/types'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, ArrowRight, Home, BookOpen, Library } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Home, BookOpen } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import {
   Dialog,
@@ -16,6 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Progress } from '@/components/ui/progress'
 
 
 export default function LibraryPage() {
@@ -27,7 +29,7 @@ export default function LibraryPage() {
   const pageRef = useRef<HTMLDivElement>(null)
 
   const calculatePages = useCallback(() => {
-    if (!articles.length || !pageRef.current) return;
+    if (!articles.length || !pageRef.current || pageRef.current.clientHeight === 0) return;
 
     const pageHeight = pageRef.current.clientHeight;
     const newPages: Article[][] = [];
@@ -47,7 +49,6 @@ export default function LibraryPage() {
       cardClone.innerHTML = `<div><div><h3>Title</h3></div><div><p>Source</p></div></div><button>Details</button>`;
       tempContainer.appendChild(cardClone);
       const cardStyle = window.getComputedStyle(cardClone);
-      const cardMargin = parseFloat(cardStyle.marginTop) + parseFloat(cardStyle.marginBottom);
       const gridGap = 16; // from `gap-4`
       tempCardHeight = cardClone.offsetHeight + gridGap;
       tempContainer.removeChild(cardClone);
@@ -56,10 +57,15 @@ export default function LibraryPage() {
     document.body.removeChild(tempContainer);
 
     if (tempCardHeight === 0) {
+        setPages([]);
         return;
     }
     
     const itemsPerPage = Math.floor(pageHeight / tempCardHeight);
+     if (itemsPerPage <= 0) {
+        setPages([]);
+        return;
+    }
     
     for (let i = 0; i < articles.length; i += itemsPerPage) {
         newPages.push(articles.slice(i, i + itemsPerPage));
@@ -106,7 +112,8 @@ export default function LibraryPage() {
   }
   
   const isFirstPage = currentPage === 0;
-  const isLastPage = pages.length - 1 <= currentPage;
+  const isLastPage = pages.length > 0 ? currentPage >= pages.length - 1 : true;
+  const progress = pages.length > 0 ? ((currentPage + 1) / pages.length) * 100 : 0;
 
 
   if (isLoading) {
@@ -115,19 +122,7 @@ export default function LibraryPage() {
 
   return (
     <div className="container mx-auto max-w-4xl p-4 h-screen flex flex-col">
-      <header className="py-4 border-b mb-4 flex-shrink-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-              <Library className="w-8 h-8 text-primary" />
-              <h1 className="text-3xl font-bold font-headline tracking-tight">图书馆</h1>
-          </div>
-          <Button onClick={() => router.push('/sources')} variant="outline">
-              管理来源
-          </Button>
-        </div>
-      </header>
-
-      <main ref={pageRef} className="flex-grow overflow-hidden">
+      <main ref={pageRef} className="flex-grow overflow-hidden py-4">
         {pages.length > 0 && pages[currentPage] ? (
           <div className="grid gap-4 h-full content-start">
             {pages[currentPage].map((article) => (
@@ -184,8 +179,9 @@ export default function LibraryPage() {
         )}
       </main>
 
-       <footer className="py-4 border-t mt-4 flex-shrink-0">
-            <div className="flex items-center justify-between">
+       <footer className="flex-shrink-0">
+            <Progress value={progress} className="h-1" />
+            <div className="flex items-center justify-between py-4">
                 <Button onClick={handlePrevPage} variant="outline" disabled={isFirstPage || pages.length === 0} className={isFirstPage || pages.length === 0 ? "pointer-events-none opacity-50" : ""}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     上一页

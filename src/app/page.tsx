@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -18,7 +19,7 @@ export default function BookshelfPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   
   const calculatePages = useCallback(() => {
-    if (!shelfBooks.length || !pageRef.current) {
+    if (!shelfBooks.length || !pageRef.current || pageRef.current.clientHeight === 0) {
         setPages([]);
         return;
     };
@@ -58,6 +59,7 @@ export default function BookshelfPage() {
     document.body.removeChild(tempContainer);
 
     if(tempCardHeight === 0) {
+      setPages([]);
       return;
     }
     
@@ -88,12 +90,14 @@ export default function BookshelfPage() {
   }, [])
   
   useEffect(() => {
-    // Use requestAnimationFrame to ensure the DOM is painted before calculating.
-    requestAnimationFrame(() => {
-        calculatePages();
-    });
-    window.addEventListener('resize', calculatePages)
-    return () => window.removeEventListener('resize', calculatePages)
+    if(!isLoading) {
+        // Use requestAnimationFrame to ensure the DOM is painted before calculating.
+        requestAnimationFrame(() => {
+            calculatePages();
+        });
+        window.addEventListener('resize', calculatePages)
+        return () => window.removeEventListener('resize', calculatePages)
+    }
   }, [isLoading, shelfBooks, calculatePages])
 
 
@@ -110,7 +114,8 @@ export default function BookshelfPage() {
   }
 
   const isFirstPage = currentPage === 0
-  const isLastPage = pages.length - 1 <= currentPage
+  const isLastPage = pages.length > 0 ? currentPage >= pages.length - 1 : true;
+  const progress = pages.length > 0 ? ((currentPage + 1) / pages.length) * 100 : 0;
 
   if (isLoading) {
     return <div className="container mx-auto max-w-6xl p-4 flex justify-center items-center h-screen">加载中...</div>
@@ -118,17 +123,20 @@ export default function BookshelfPage() {
 
   return (
     <div className="container mx-auto max-w-6xl p-4 h-screen flex flex-col">
-      <header className="py-4 border-b mb-4 flex-shrink-0">
-          <div className="flex justify-between items-center">
-              <h1 className="text-3xl font-bold font-headline tracking-tight">书架</h1>
-              <Button asChild>
-                  <Link href="/library">
-                      前往图书馆 <Library className="ml-2 h-4 w-4" />
-                  </Link>
-              </Button>
-          </div>
-      </header>
-
+       <div className="flex-shrink-0 mb-4">
+        <Card className="bg-primary-foreground">
+          <CardHeader>
+            <CardTitle>发现新内容</CardTitle>
+            <CardDescription>前往图书馆浏览所有可阅读的书籍。</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild>
+              <Link href="/library">前往图书馆</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+      
       <main ref={pageRef} className="flex-grow overflow-hidden">
         {pages.length > 0 && pages[currentPage] ? (
            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 h-full content-start">
@@ -165,17 +173,18 @@ export default function BookshelfPage() {
         )}
       </main>
 
-      <footer className="py-4 border-t mt-4 flex-shrink-0">
-          <div className="flex items-center justify-between">
+      <footer className="flex-shrink-0">
+          <Progress value={progress} className="h-1" />
+          <div className="flex items-center justify-between py-4">
               <Button onClick={handlePrevPage} variant="outline" disabled={isFirstPage || pages.length === 0} className={isFirstPage || pages.length === 0 ? "pointer-events-none opacity-50" : ""}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   上一页
               </Button>
               
               <div className="flex flex-col items-center">
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {pages.length > 0 ? `第 ${currentPage + 1} 页 / 共 ${pages.length} 页` : `第 0 / 0 页`}
-                  </span>
+                   <Button onClick={() => router.push('/sources')} variant="ghost">
+                    管理来源
+                  </Button>
               </div>
 
               <Button onClick={handleNextPage} variant="outline" disabled={isLastPage || pages.length === 0} className={isLastPage || pages.length === 0 ? "pointer-events-none opacity-50" : ""}>
