@@ -14,4 +14,5 @@ export interface Article {
   onShelf: boolean;
   readPercentage: number;
   currentChapter: string;
+  currentParagraph?: number; // Index of the paragraph to resume from
 }

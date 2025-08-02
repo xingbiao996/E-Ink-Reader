@@ -27,40 +27,44 @@ const mockArticles: Article[] = [
     sourceId: '1',
     sourceName: '科技博客',
     title: 'Web开发的未来', 
-    content: LOREM_IPSUM_PARAGRAPHS.slice(0, 12),
+    content: LOREM_IPSUM_PARAGRAPHS.slice(0, 25),
     onShelf: true,
     readPercentage: 65,
-    currentChapter: '第五章：服务端组件'
+    currentChapter: '第五章：服务端组件',
+    currentParagraph: 15
   },
   { 
     id: '102', 
     sourceId: '1', 
     sourceName: '科技博客',
     title: '理解量子计算', 
-    content: LOREM_IPSUM_PARAGRAPHS.slice(4, 10),
+    content: LOREM_IPSUM_PARAGRAPHS.slice(4, 20),
     onShelf: true,
     readPercentage: 15,
-    currentChapter: '第一章：基本概念'
+    currentChapter: '第一章：基本概念',
+    currentParagraph: 2
   },
   { 
     id: '201', 
     sourceId: '2', 
     sourceName: '文学期刊',
     title: '古典文学的现代解读', 
-    content: LOREM_IPSUM_PARAGRAPHS.slice(2, 9),
+    content: LOREM_IPSUM_PARAGRAPHS.slice(2, 30),
     onShelf: false,
     readPercentage: 0,
-    currentChapter: '序言'
+    currentChapter: '序言',
+    currentParagraph: 0
   },
    { 
     id: '301', 
     sourceId: '3', 
     sourceName: '科学周刊',
     title: '基因工程的突破', 
-    content: LOREM_IPSUM_PARAGRAPHS.slice(0, 5),
+    content: LOREM_IPSUM_PARAGRAPHS.slice(0, 15),
     onShelf: true,
     readPercentage: 90,
-    currentChapter: '第三章：伦理考量'
+    currentChapter: '第三章：伦理考量',
+    currentParagraph: 13
   },
 ];
 
