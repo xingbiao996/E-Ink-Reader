@@ -6,15 +6,17 @@ import Link from 'next/link'
 import { getShelfBooks } from '@/lib/data'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, ArrowRight, Home, BookOpen, Library } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import type { Article } from '@/lib/types'
+import { useRouter } from 'next/navigation'
 
 export default function BookshelfPage() {
   const [shelfBooks, setShelfBooks] = useState<Article[]>([])
   const [pages, setPages] = useState<Article[][]>([])
   const [currentPage, setCurrentPage] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
   const pageRef = useRef<HTMLDivElement>(null)
   
@@ -123,21 +125,7 @@ export default function BookshelfPage() {
 
   return (
     <div className="container mx-auto max-w-6xl p-4 h-screen flex flex-col">
-       <div className="flex-shrink-0 mb-4">
-        <Card className="bg-primary-foreground">
-          <CardHeader>
-            <CardTitle>发现新内容</CardTitle>
-            <CardDescription>前往图书馆浏览所有可阅读的书籍。</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild>
-              <Link href="/library">前往图书馆</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-      
-      <main ref={pageRef} className="flex-grow overflow-hidden">
+      <main ref={pageRef} className="flex-grow overflow-hidden py-4">
         {pages.length > 0 && pages[currentPage] ? (
            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 h-full content-start">
               {pages[currentPage].map((book) => (
@@ -165,8 +153,14 @@ export default function BookshelfPage() {
              {isLoading ? (
                <p className="text-muted-foreground">正在计算分页...</p>
              ) : (
-                <Card className="flex items-center justify-center h-40 w-full">
-                  <p className="text-muted-foreground">您的书架是空的。请先从图书馆添加书籍。</p>
+                <Card className="w-full p-6 text-center">
+                    <CardTitle className="mb-2">您的书架是空的</CardTitle>
+                    <CardDescription className="mb-4">
+                        从图书馆添加一些书籍开始阅读。
+                    </CardDescription>
+                    <Button asChild>
+                        <Link href="/library">前往图书馆</Link>
+                    </Button>
                 </Card>
              )}
           </div>
@@ -181,7 +175,13 @@ export default function BookshelfPage() {
                   上一页
               </Button>
               
-              <div className="flex flex-col items-center">
+              <div className="flex items-center gap-4">
+                   <Button onClick={() => router.push('/')} variant="ghost">
+                     书架
+                   </Button>
+                    <Button onClick={() => router.push('/library')} variant="ghost">
+                     图书馆
+                   </Button>
                    <Button onClick={() => router.push('/sources')} variant="ghost">
                     管理来源
                   </Button>

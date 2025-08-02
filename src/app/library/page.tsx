@@ -7,7 +7,7 @@ import { getAllArticles } from '@/lib/data'
 import { notFound, useRouter } from 'next/navigation'
 import type { Article } from '@/lib/types'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, ArrowRight, Home, BookOpen } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import {
   Dialog,
@@ -187,10 +187,17 @@ export default function LibraryPage() {
                     上一页
                 </Button>
                 
-                <Button onClick={() => router.push('/')} variant="ghost">
-                    <Home className="mr-2 h-4 w-4" />
-                    返回书架
-                </Button>
+                 <div className="flex items-center gap-4">
+                   <Button onClick={() => router.push('/')} variant="ghost">
+                     书架
+                   </Button>
+                    <Button onClick={() => router.push('/library')} variant="ghost">
+                     图书馆
+                   </Button>
+                   <Button onClick={() => router.push('/sources')} variant="ghost">
+                    管理来源
+                  </Button>
+              </div>
 
                 <Button onClick={handleNextPage} variant="outline" disabled={isLastPage || pages.length === 0} className={isLastPage || pages.length === 0 ? "pointer-events-none opacity-50" : ""}>
                     下一页
