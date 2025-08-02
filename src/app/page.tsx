@@ -65,7 +65,11 @@ export default function BookshelfPage() {
       return;
     }
     
-    const rowsPerPage = Math.floor(pageHeight / tempCardHeight);
+    const welcomeCard = pageRef.current.querySelector('#welcome-card')
+    const welcomeCardHeight = welcomeCard ? welcomeCard.clientHeight + 24 : 0; // 24 is for gap-6
+    const availableHeight = pageHeight - welcomeCardHeight;
+    
+    const rowsPerPage = Math.floor(availableHeight / tempCardHeight);
     const itemsPerPage = rowsPerPage * numColumns;
     
     if (itemsPerPage <= 0) {
@@ -126,6 +130,12 @@ export default function BookshelfPage() {
   return (
     <div className="container mx-auto max-w-6xl p-4 h-screen flex flex-col">
       <main ref={pageRef} className="flex-grow overflow-hidden py-4">
+        <Card id="welcome-card" className="mb-6">
+            <CardHeader>
+                <CardTitle>欢迎使用 E-Ink Reader</CardTitle>
+                <CardDescription>（stcn之父徒儿开发）</CardDescription>
+            </CardHeader>
+        </Card>
         {pages.length > 0 && pages[currentPage] ? (
            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 h-full content-start">
               {pages[currentPage].map((book) => (
