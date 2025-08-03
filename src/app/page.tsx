@@ -124,11 +124,11 @@ export default function BookshelfPage() {
   const progress = pages.length > 0 ? ((currentPage + 1) / pages.length) * 100 : 0;
 
   if (isLoading) {
-    return <div className="container mx-auto max-w-6xl p-4 flex justify-center items-center h-screen">加载中...</div>
+    return <div className="container mx-auto max-w-4xl p-4 flex justify-center items-center h-screen">加载中...</div>
   }
 
   return (
-    <div className="container mx-auto max-w-6xl p-4 h-screen flex flex-col">
+    <div className="container mx-auto max-w-4xl p-4 h-screen flex flex-col">
       <main ref={pageRef} className="flex-grow overflow-hidden py-4">
         <Card id="welcome-card" className="mb-6">
             <CardHeader>
